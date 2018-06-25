@@ -49,23 +49,23 @@ class Game(object):
 
 
   def print_intro(self):
-    print ""
-    print "*** ::::::::::::::::::::::::::::::::::::: ***"
-    print "*** ::                                 :: ***"
-    print "*** ::   // VULCAN MURDER MYSTERY //   :: ***"
-    print "*** ::     .====.        ___ .==.   o  :: ***"
-    print "*** ::     |::::|  .===, |:| |::| =/ \=:: ***"
-    print "*** :: .___|::::|  |:::| |:| |::| | 0 |:: ***"
-    print "*** :: |:::|====|  |:::|-----|::| |:::|:: ***"
-    print "*** :: |===|::::|  |===::::::|::| |___|:: ***"
-    print "*** :: ![]:!:[]:!  ! []::::x:|[]| || ||:: ***"
-    print "*** ::---------------------------------:: ***"
-    print "*** ::                                 :: ***"
-    print "*** ::  --  --  --  --  --  --  --  -- :: ***"
-    print "*** ::                                 :: ***"
-    print "*** ::---------------------------------:: ***"
-    print "*** ::::::::::::::::::::::::::::::::::::: ***"
-    print ""
+    print("")
+    print("*** ::::::::::::::::::::::::::::::::::::: ***")
+    print("*** ::                                 :: ***")
+    print("*** ::   // VULCAN MURDER MYSTERY //   :: ***")
+    print("*** ::     .====.        ___ .==.   o  :: ***")
+    print("*** ::     |::::|  .===, |:| |::| =/ \=:: ***")
+    print("*** :: .___|::::|  |:::| |:| |::| | 0 |:: ***")
+    print("*** :: |:::|====|  |:::|-----|::| |:::|:: ***")
+    print("*** :: |===|::::|  |===::::::|::| |___|:: ***")
+    print("*** :: ![]:!:[]:!  ! []::::x:|[]| || ||:: ***")
+    print("*** ::---------------------------------:: ***")
+    print("*** ::                                 :: ***")
+    print("*** ::  --  --  --  --  --  --  --  -- :: ***")
+    print("*** ::                                 :: ***")
+    print("*** ::---------------------------------:: ***")
+    print("*** ::::::::::::::::::::::::::::::::::::: ***")
+    print("")
     self.narrate("Upon Red Mountain sits Vulcan, a statue to honor Birmingham's ironworkers.")
     x = {1: 'a murderer has',
          2: 'a duo of murderers have',
@@ -92,7 +92,7 @@ class Game(object):
     for area_idx in range(len(self.areas)):
       area = self.areas[area_idx]
       txt = ", ".join([str(i) for i in area])
-      print "*** AREA %2d: %s" % (area_idx+1, txt)
+      print("*** AREA %2d: %s" % (area_idx+1, txt))
 
   def print_turn_header(self):
     s = "\n"
@@ -193,7 +193,7 @@ class Game(object):
       return -1
     else:
       best_score = kill_list[0][0]
-      best_scores = filter(lambda x: x[0] == best_score, kill_list)
+      best_scores = list(filter(lambda x: x[0] == best_score, kill_list))
       random.shuffle(best_scores)
       return best_scores[0][1]
 
@@ -260,6 +260,12 @@ class Game(object):
       self.narrate("✞ %d has been strangled to death ✞" % (accuse))
       self.kill(accuse)
 
+  def raw_input(self, txt):
+    global input
+    try: input = raw_input
+    except NameError: pass
+    return input(txt)
+
   def get_input_in(self, options):
     """
     Gets input from the user for a given set of options.
@@ -277,9 +283,9 @@ class Game(object):
     while result == None:
       raw = ""
       if opts == "":
-        raw = raw_input("input: ")
+        raw = self.raw_input("input: ")
       else:
-        raw = raw_input("input [%s]: " % opts)
+        raw = self.raw_input("input [%s]: " % opts)
       try:
         result = decoder_fun(raw)
       except:
