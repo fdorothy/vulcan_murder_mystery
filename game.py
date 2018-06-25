@@ -7,6 +7,12 @@ import copy
 import time
 
 class Game(object):
+
+  # gameplay mechanics
+  PIECES = 9
+  AREAS = 3
+  MURDERERS = 2
+
   DELAY = 0.1
 
   def __init__(self, players, murderers, areas):
@@ -61,7 +67,12 @@ class Game(object):
     print "*** ::::::::::::::::::::::::::::::::::::: ***"
     print ""
     self.narrate("Upon Red Mountain sits Vulcan, a statue to honor Birmingham's ironworkers.")
-    self.narrate("On this night, a duo of murderers have taken advantage of the winter storm")
+    x = {1: 'a murderer has',
+         2: 'a duo of murderers have',
+         3: 'a trio of murderers have'}
+    n = Game.MURDERERS
+    txt = x[n] if n in x.keys() else '%d murderers have' % n
+    self.narrate("On this night, %s taken advantage of the winter storm" % txt)
     self.narrate("...and are murdering visitors one by one")
     self.narrate("You are the Doctor, and alone can you keep the murderers from killing")
     self.narrate("Here is the sequence of play:")
@@ -228,7 +239,7 @@ class Game(object):
     self.place_murderers()
     self.print_board()
     self.narrate("Doctor, which area do you want to protect?")
-    area = self.get_input_in([1, 2, 3])
+    area = self.get_input_in(range(1,Game.AREAS+1))
     self.place(area-1, self.player)
     to_kill = self.best_kill()
     if to_kill == -1:
@@ -277,7 +288,7 @@ class Game(object):
     return result
      
 if __name__ == '__main__':
-  game = Game(9, 2, 3)
+  game = Game(Game.PIECES, Game.MURDERERS, Game.AREAS)
   game.print_intro()
   while True:
     game.play_turn()
@@ -288,5 +299,6 @@ if __name__ == '__main__':
     elif game.game_won():
       game.narrate("You've choked out the lives of all the murderers. Good job.")
       game.narrate("And it only took %d turns!" % (game.turn))
-      game.narrate("You saved %d out of %d visitors, not counting yourself." % (len(game.visitors), 6))
+      visitors = Game.PIECES - Game.MURDERERS - 1
+      game.narrate("You saved %d out of %d visitors, not counting yourself." % (len(game.visitors), visitors))
       break
